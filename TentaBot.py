@@ -30,7 +30,7 @@ async def on_message(message):
 
         if message.content.startswith('!8ball'):
             if len(message.content) > 7:
-                random.seed(''.join(message.content[6:]))
+                random.seed(message.author.name.join(message.content[6:]))
             else:
                 await client.send_message(message.channel, "How am I supposed to answer a question that doesn't exist?")
                 return
@@ -42,7 +42,7 @@ async def on_message(message):
                 "Probably, if you're dumb enough.",
                 "I guess, sure?",
                 "Ask in pig latin.",
-                "Type the question backwards and ask again."
+                "Type the question backwards and ask again.",
                 "No way lol.",
                 "Not a chance.",
                 "Why?",
