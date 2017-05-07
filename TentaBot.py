@@ -49,7 +49,7 @@ async def on_message(message):
                 "The way you smell tells me no.",
                 #one whole entry:
                 ("You know sometimes I have the same question, " +
-                    "but then I forget what I was doing and smash my head on the ground" +
+                    "but then I forget what I was doing and smash my head on the ground. \n" +
                     "Because a tentacle jesus lady told me to." +
                     "\n Do you know how much that hurts? \n It doesn't. \n It's awesome."),
                 "I'm not going to answer that."
