@@ -10,6 +10,8 @@
    "I bet you watch NOUN porn while GERUND your BODYPART.",
    "Your taste in NOUN is mediocre at best.",
    "I bet you build ITEM on CHAMPION you GERUND NOUN.",
+   "You play CHAMPION worse than I do… and I’m a bot.",
+   "You probably don’t even build ITEM on CHAMPION. Get with the meta.",
    "You look more like NOUN than CHAMPION does. \n ...\n That's probably bad."
  ],
  "noun": [
@@ -26,7 +28,8 @@
    "CHAMPION",
    "ITEM",
    "ding dong",
-   "disco stick"
+   "disco stick",
+   "meme"
    
  ],
  "gerund": [
@@ -143,6 +146,7 @@
    "Sona",
    "Soraka",
    "Swain",
+   "Swamp Nami",
    "Syndra",
    "Tahm Kench",
    "Taliyah",
@@ -179,7 +183,11 @@
  ],
 
  "item": [
-   "TriForce"
+   "TriForce",
+   "Frozen Fist",
+   "Heart of Gold",
+   "Runic Bulwark",
+   "Mobis"
  ],
 
  "bodypart" : [
