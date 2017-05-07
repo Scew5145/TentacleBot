@@ -44,5 +44,7 @@ async def on_message(message):
                 base = base.replace('ITEM', random.choice(insultDict['item']), 1)
             # And release to the world:
             await client.send_message(message.channel, base)
+        if message.content.startswith('!github'):
+            await client.send_message(message.channel, 'Github Link: \n https://github.com/Scew5145/TentacleBot')
 
 client.run(token)
