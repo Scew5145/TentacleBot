@@ -25,11 +25,13 @@ async def on_message(message):
     if message.author != client.user:
         if message.content.startswith('!ping'): #Repeats what the user says
                 await client.send_message(message.channel, message.content)
+        if message.content.startswith('!help'):
+                await  client.send_message(message.channel, 'No fuck off')
         if message.content.startswith('!insult') :
 
             random.seed()
             base = random.choice(insultDict['base'])
-            print(base)
+            print('insulting', message.author.name)
             while(base.find('NOUN') != -1
                     or base.find('GERUND') != -1
                     or base.find('CHAMPION') != -1
