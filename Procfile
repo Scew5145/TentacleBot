@@ -1,0 +1,1 @@
+worker: python3 TentaBot.py MzEwNDc4NjkxODQwOTUwMjcy.C_AcMw.RMwY56ufRkzfrxyjB4lTpiuHLNQ
