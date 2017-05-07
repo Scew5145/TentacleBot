@@ -28,7 +28,7 @@ async def on_message(message):
         if message.content.startswith('!ping'): #Repeats what the user says
                 await client.send_message(message.channel, message.content)
 
-        if message.content.startswith('!8ball '):
+        if message.content.startswith('!8ball'):
             if len(message.content) > 7:
                 random.seed(''.join(message.content[6:]))
             else:
