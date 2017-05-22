@@ -4,8 +4,8 @@ import random
 import asyncio
 import sys
 
-if len(sys.argv) != 2:
-    print('add token arg only')
+if len(sys.argv) != 3:
+    print('usage: TentaBot.py [discord bot key] [riot api key]')
     exit()
 token = sys.argv[1]
 client = discord.Client()
