@@ -1,17 +1,44 @@
 import discord
 import json
 import random
+import requests
 import asyncio
 import sys
 
+
+regions = ['NA1', 'RU', 'KR', 'EUN1', 'EUW1', 'TR1', 'LA1', 'LA2', 'BR1', 'OC1', 'JP1']
 if len(sys.argv) != 3:
     print('usage: TentaBot.py [discord bot key] [riot api key]')
     exit()
-token = sys.argv[1]
+discToken = sys.argv[1]
+riotKey = sys.argv[2]
 client = discord.Client()
 random.seed(None)
 with open('insults.json') as insultfile:
     insultDict = json.load(insultfile)
+
+
+def pull_acc_ID(username, server = 'NA1'):
+    # Uses the Riot API to grab the account's ID and return it. Doesn't return region, as it's an input.
+    if server.upper() in ['EUN', 'EUW', 'TR', 'BR', 'OC', 'NA', 'JP']:
+        server += '1'
+    elif server.upper() in ['EUNE', 'EUNE1']:
+        server = 'EUN1'
+    if server.upper() not in regions:
+        print('bad region. Please provide valid region id.')
+        return -1
+    url = 'https: // ' \
+          + server \
+          +'.api.riotgames.com / lol / summoner / v3 / summoners / by - name / '\
+          + username \
+          + '?api_key =' \
+          + riotKey
+    response = requests.get(url)
+    if( response.status_code != 200):
+        print('something went wrong with the request. \n Status Code:', response.status_code)
+        return -1
+    accID = response.content['accountId']
+    return accID
 
 @client.event
 async def on_ready():
@@ -87,4 +114,4 @@ async def on_message(message):
         if message.content.startswith('!github'):
             await client.send_message(message.channel, 'Github Link: \n https://github.com/Scew5145/TentacleBot')
 
-client.run(token)
+client.run(discToken)
