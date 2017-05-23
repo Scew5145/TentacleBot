@@ -143,9 +143,9 @@ def has_fed(acc_id, server = 'NA1'):
 
     kdadiff = kda - enemykda
     if playerdata['win']:
-        output += 'USER won their last game! \n'
+        output += 'USER won their last ranked game! \n'
     else:
-        output += 'USER fucked up last game. \n'
+        output += 'USER fucked up last ranked game. \n'
     if kda < 1.0:
         output += "They had a negative KDA of "
     else:
