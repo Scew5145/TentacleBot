@@ -79,13 +79,13 @@ def has_fed(acc_id, server = 'NA1'):
     most_recent_match_id = -1
     for match in recent_games['matches']:
         if match['queue'] == 420:
-            most_recent_match_id == match['gameId']
+            most_recent_match_id = match['gameId']
             break
 
     if most_recent_match_id == -1:
         return "No ranked match in the last 20 games. Normals and stuff are private so I can't do things with them."
 
-    
+
     # Most Recent Match Overview
     url = 'https://'
     url += server
