@@ -4,21 +4,22 @@ import random
 import requests
 import asyncio
 import sys
+import os
 
 raw = ''
 discToken = ''
 riotKey = ''
 regions = ['NA1', 'RU', 'KR', 'EUN1', 'EUW1', 'TR1', 'LA1', 'LA2', 'BR1', 'OC1', 'JP1']
 if len(sys.argv) == 1:
-    raw = input('add input in form [discord bot key] [riot api key]')
-    discToken = raw.split(' ')[0]
-    riotKey = raw.split(' ')[1]
-elif len(sys.argv) != 3:
-    print('usage: TentaBot.py [discord bot key] [riot api key]')
-    exit()
+    riotKey = os.environ.get('RIOTKEY')
+    discToken = os.environ.get('DISCKEY')
 else:
-    discToken = sys.argv[1]
-    riotKey = sys.argv[2]
+    print('usage: TentaBot.py')
+    exit()
+print(riotKey, discToken)
+
+
+
 client = discord.Client()
 random.seed(None)
 with open('insults.json') as insultfile:

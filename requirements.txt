@@ -3,4 +3,3 @@ aiohttp
 requests
 websockets
 chardet
-
