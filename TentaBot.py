@@ -16,7 +16,7 @@ if len(sys.argv) == 1:
 else:
     print('usage: TentaBot.py')
     exit()
-print(riotKey, discToken)
+print(riotKey, 'riotkey', discToken)
 
 
 
@@ -76,8 +76,16 @@ def has_fed(acc_id, server = 'NA1'):
         print('something went wrong with the request. \n Status Code:', response.status_code)
         return "Something is broken loading match history and I don't know what: " + response.status_code
     recent_games = json.loads(response.text)
-    most_recent_match_id = recent_games['matches'][0]['gameId']
+    most_recent_match_id = -1
+    for match in recent_games['matches']:
+        if match['queue'] == 420:
+            most_recent_match_id == match['gameId']
+            break
 
+    if most_recent_match_id == -1:
+        return "No ranked match in the last 20 games. Normals and stuff are private so I can't do things with them."
+
+    
     # Most Recent Match Overview
     url = 'https://'
     url += server
