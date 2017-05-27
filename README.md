@@ -25,8 +25,8 @@ Links to this repository.
 
 * _!ping_ 
 
-Spits out what the user just said. 
+Spits out what the user just said. Mostly for testing purposes.
 
-* _!hasfed_ [username] [region] | [username]
+* _!hasfed_ [username], [region] | [username]
 
-Grabs the user's last ranked game and spits out relevant statistics. Currently 'slightly' broken, as it doesn't work properly when the person's username has spaces. This'll be fixed by tonight, probably.
+Grabs the user's last ranked game and spits out relevant statistics in a string.
