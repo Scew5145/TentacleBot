@@ -278,7 +278,7 @@ async def on_message(message):
             # URLs
             match_history_url = 'http://matchhistory.na.leagueoflegends.com/en/#match-details/'
             match_history_url += server
-            match_history_url += '/' + playerdata['matchId']
+            match_history_url += '/' + str(playerdata['matchId'])
             match_history_url += '/' + id + '?tab=overview'
 
             opggurl = 'https://'
