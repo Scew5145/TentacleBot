@@ -322,7 +322,7 @@ async def on_message(message):
                     lane = 'Support'
                 else:
                     lane = 'Bot'
-            elif playerdata['lane'] == 'MID':
+            elif playerdata['lane'] == 'MID' or playerdata['lane'] == 'MIDDLE':
                 lane = 'Mid'
             elif playerdata['lane'] == 'TOP':
                 lane = 'Top'
