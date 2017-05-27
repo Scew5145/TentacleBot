@@ -264,7 +264,7 @@ async def on_message(message):
             if len(args) >= 3:
                 if args[-2][-1] == ',': # The last character of the second to last argument
                     server = args[-1]
-                    username = ''.join(args[1:-1])[:-1] # Python list syntax is magic. If you can't tell, last [:-1]
+                    username = ' '.join(args[1:-1])[:-1] # Python list syntax is magic. If you can't tell, last [:-1]
                     # is for cutting off the comma at the end of the argument
 
                 elif ',' in args[-1]: # the 'I forgot a space' case
@@ -272,7 +272,7 @@ async def on_message(message):
                     server = temp[-1]
                     username = args[1:-1]+temp[:-1]
                 else:
-                    username = ''.join(args[1:])
+                    username = ' '.join(args[1:])
             else:
                 await client.send_message(message.channel, 'Wrong Number of Arguments.' +
                 '\n !hasfed [username], [server] \n or \n !hasfed [username] \n No server defaults to NA1.')
