@@ -306,7 +306,7 @@ async def on_message(message):
             opggurl += server
             opggurl += '.op.gg/summoner/userName='
             opggurl += username.replace(' ', '+')
-            em = discord.Embed(title= 'Feeder Report', colour=0x555555, url=opggurl)
+            em = discord.Embed(title= 'Feeder Report (Click Here for OP.GG Profile)', colour=0x555555, url=opggurl)
 
             champinfo = pull_champion_info(playerdata['championId'])
 
@@ -316,7 +316,7 @@ async def on_message(message):
 
             champimgurl = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + champinfo['image']['full']
 
-            em.set_author(name = username, icon_url= champimgurl)
+            em.set_author(name = username + ' playing ' + champinfo['name'], icon_url= champimgurl)
             if playerdata['lane'] == 'BOTTOM':
                 if playerdata['role'] == 'DUO_SUPPORT':
                     lane = 'Support'
@@ -336,18 +336,18 @@ async def on_message(message):
             enemyKDAstring = str(enemydata['kills']) + ' / ' + str(enemydata['deaths']) + ' / ' + str(enemydata['assists'])
             kda = round((playerdata['kills'] + playerdata['assists']) / playerdata['deaths'], 2)
             enemykda = round((enemydata['kills'] + enemydata['assists']) / enemydata['deaths'], 2)
-            em.add_field(name = 'KDA', value = (str(kda) + ' | *' + KDAstring + '*'))
+            em.add_field(name = 'KDA', value = (str(kda) + ' | **' + KDAstring + '**'))
             em.add_field(name = 'CSD @ 10', value = str(round(playerdata['csdelta']['0-10'],2)))
             em.add_field(name = 'Gold Difference @ 10', value = str(round(playerdata['golddelta']['0-10'],2)))
             em.add_field(name = 'XP Difference @ 10', value = str(round(playerdata['xpdelta']['0-10'],2)))
-            em.add_field(name = "Enemy Laner's KDA", value = str(enemykda) + ' | *' + enemyKDAstring + '*')
+            em.add_field(name = "Enemy Laner's KDA", value = str(enemykda) + ' | **' + enemyKDAstring + '**')
 
             if enemykda > kda or round(playerdata['csdelta']['0-10'], 2) < 0.0 or round(playerdata['golddelta']['0-10'], 2) < 0.0:
                 em.add_field(name = 'Feeder Status', value = 'True')
             else:
                 em.add_field(name = 'Feeder Status', value = 'False')
 
-
             await client.send_message(message.channel, embed=em)
+            return
 
 client.run(discToken)
