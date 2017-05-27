@@ -308,11 +308,13 @@ async def on_message(message):
             em = discord.Embed(title= 'Feeder Report', colour=0x555555, url=opggurl)
 
             champinfo = pull_champion_info(playerdata['championId'])
+            print(champinfo)
             if champinfo == -1:
                 await client.send_message(message.channel, 'Issue pulling champ image. Too many requests to API?')
                 return
 
             champimgurl = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + champinfo['image']['full']
+            print(champimgurl)
             em.set_author(name = username, icon_url= champimgurl)
             if playerdata['lane'] == 'BOTTOM':
                 if playerdata['role'] == 'DUO_SUPPORT':
