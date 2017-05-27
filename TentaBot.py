@@ -145,7 +145,8 @@ def has_fed(acc_id, server = 'NA1'):
                 'lane': participant['timeline']['lane'],
                 'role': participant['timeline']['role'] ,
                 'championId': participant['championId'],
-                'matchId': most_recent_match_id
+                'matchId': most_recent_match_id,
+                'largestMultiKill': participant['stats']['largestMultiKill']
             }
             break
     for participant in gameDict['participants']: #have to go through the whole dictionary to find the right opponent.
@@ -326,10 +327,22 @@ async def on_message(message):
             kda = round((playerdata['kills'] + playerdata['assists']) / playerdata['deaths'], 2)
             enemykda = round((enemydata['kills'] + enemydata['assists']) / enemydata['deaths'], 2)
             em.add_field(name='KDA', value=(str(kda) + ' | **' + KDAstring + '**'))
+            em.add_field(name="Enemy Laner's KDA", value=str(enemykda) + ' | **' + enemyKDAstring + '**')
             em.add_field(name='CSD @ 10', value=str(round(playerdata['csdelta']['0-10'],2)))
             em.add_field(name='Gold Difference @ 10', value=str(round(playerdata['golddelta']['0-10'],2)))
             em.add_field(name='XP Difference @ 10', value=str(round(playerdata['xpdelta']['0-10'],2)))
-            em.add_field(name="Enemy Laner's KDA", value=str(enemykda) + ' | **' + enemyKDAstring + '**')
+            largestMulti = 'Zero'
+            if playerdata['largestMultiKill'] == 1:
+                largestMulti = 'One'
+            elif playerdata['largestMultiKill'] == 2:
+                largestMulti = 'Double Kill'
+            elif playerdata['largestMultiKill'] == 3:
+                largestMulti = 'Triple Kill'
+            elif playerdata['largestMultiKill'] == 4:
+                largestMulti = 'Quadra Kill'
+            elif playerdata['largestMultiKill'] == 5:
+                largestMulti = ':regional_indicator_p:enta Kill '
+            em.add_field(name='Largest Multikill', value=largestMulti)
             em.add_field(name='Win', value=str(playerdata['win']))
             if enemykda > kda or round(playerdata['csdelta']['0-10'], 2) < 0.0 or round(playerdata['golddelta']['0-10'], 2) < 0.0:
                 em.add_field(name='Feeder Status', value='True')
