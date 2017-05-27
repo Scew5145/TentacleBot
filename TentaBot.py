@@ -290,8 +290,7 @@ async def on_message(message):
             uname += uname.replace('_', '+')
             opggurl += uname
             
-            em = discord.Embed(title= 'Feeder Report', colour=0x555555, url=opggurl)
-            em.add_field(name='Full Match History (Make sure to log in first!)', value='[Match History]('
+            em = discord.Embed(title= 'Feeder Report', colour=0x555555, description='[Match History]('
                                                                                        +match_history_url
                                                                                        +') | [OP.GG Profile]('
                                                                                        + opggurl + ')')
