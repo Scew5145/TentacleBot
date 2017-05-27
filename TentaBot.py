@@ -136,8 +136,7 @@ def has_fed(acc_id, server = 'NA1'):
                 break
 
     #Print statement for bot output:
-    output = ''
-    feeder = True
+    output = '```Markdown'
     kda = round((playerdata['kills'] + playerdata['assists']) / playerdata['deaths'], 2)
     enemykda = round((enemydata['kills'] + enemydata['assists']) / enemydata['deaths'],2)
 
@@ -146,35 +145,21 @@ def has_fed(acc_id, server = 'NA1'):
         output += 'USER won their last ranked game! \n'
     else:
         output += 'USER fucked up last ranked game. \n'
-    if kda < 1.0:
-        output += "They had a negative KDA of "
+
+    output += '| CSD @ 10 |' + str(round(playerdata['csdelta']['0-10'],2)) + '|\n'
+    output += '|----------------|--------|\n'
+    output += '| GOLD Diff @ 10 |' + str(round(playerdata['golddelta']['0-10'],2)) + '|'
+    output += '| XP @ 10 |' + str(round(playerdata['xpdelta']['0-10'],2)) + '|\n'
+    output += '| User KDA |' + str(kda) + '|\n'
+    output += '| Enemy KDA |' + str(enemykda) + '|\n'
+    # output += '* CSD @ 10' + str(round(playerdata['csdelta']['0-10'],2)) + '\n'
+    # output += ',\n a Gold difference of ' + str(round(playerdata['golddelta']['0-10'],2)) + ',\n'
+    # output += 'and a XP difference of ' + str(round(playerdata['xpdelta']['0-10'],2)) + '.\n'
+    if(enemykda > kda or round(playerdata['csdelta']['0-10'],2) < 0.0 or round(playerdata['golddelta']['0-10'],2) < 0.0):
+        output += '\n \n _VERDICT: FEEDER_'
     else:
-        output += "They had a positive KDA of "
-    output += str(kda) + '.\n'
-    output += 'At 10 Minutes, they had a CS difference with their opponent of ' + str(round(playerdata['csdelta']['0-10'],2))
-    output += ',\n a Gold difference of ' + str(round(playerdata['golddelta']['0-10'],2)) + ',\n'
-    output += 'and a XP difference of ' + str(round(playerdata['xpdelta']['0-10'],2)) + '.\n'
-    if kda < 1.0:
-        if playerdata['golddelta']['0-10'] > 0.0:
-            output += 'They sort of fed, as they were ahead on gold but had a negative kda. '
-        elif playerdata['golddelta']['0-10'] < 0.0:
-            output += 'the player was a feeder, as their KDA was negative and they were behind on gold. '
-        if kda > enemykda:
-            output += 'That said, their opponent sucked more. The enemy laner had a KDA of ' + str(enemykda) + '.\n'
-        else:
-            output += 'Their opponent beat them with a kda of ' + str(enemykda) + '.\n'
-    if kda > 1.0:
-        if playerdata['golddelta']['0-10'] > 0.0:
-            output += 'The player was quite ahead. They had a positive KDA and were ahead on gold. \n'
-        elif playerdata['golddelta']['0-10'] < 0.0:
-            output += 'The USER was stuck in ELO hell, as they had a positive KDA but were behind on gold. \n'
-        if kda > enemykda:
-            output += 'The enemy was shit, with a KDA of ' + str(enemykda) + '.\n'
-        else:
-            output += 'Both '+ playerdata['lane'] + 'players were fed, but the enemy was fatter with a KDA of '
-            output += str(enemykda) + '.\n'
-        output += "That's a KDA difference of " + str(round(kdadiff,2)) + ". "
-    return output
+        output += '\n \n _VERDICT: NOT A FEEDER_'
+    return output+'\n```'
 
 
 
