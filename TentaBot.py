@@ -288,7 +288,7 @@ async def on_message(message):
             opggurl += server
             opggurl += '.op.gg/summoner/userName='
             uname = username.replace(' ', '+')
-            uname += uname.replace('_', '+')
+            uname = uname.replace('_', '+')
             opggurl += uname
             
             em = discord.Embed(title= 'Feeder Report', colour=0x555555, description='[Match History]('
