@@ -100,7 +100,7 @@ def has_fed(acc_id, server = 'NA1'):
     recent_games = json.loads(response.text)
     most_recent_match_id = -1
     for match in recent_games['matches']:
-        if match['queue'] == 420:
+        if match['queue'] == 420 or match['queue'] == 440:
             most_recent_match_id = match['gameId']
             break
 
@@ -144,7 +144,8 @@ def has_fed(acc_id, server = 'NA1'):
                 'xpdelta': participant['timeline']['xpDiffPerMinDeltas'],
                 'lane': participant['timeline']['lane'],
                 'role': participant['timeline']['role'] ,
-                'championId': participant['championId']
+                'championId': participant['championId'],
+                'matchId': most_recent_match_id
             }
             break
     for participant in gameDict['participants']: #have to go through the whole dictionary to find the right opponent.
@@ -158,32 +159,6 @@ def has_fed(acc_id, server = 'NA1'):
                 }
                 break
 
-    #Embed statement for bot output:
-    '''
-    output = '```Markdown\n'
-    kda = round((playerdata['kills'] + playerdata['assists']) / playerdata['deaths'], 2)
-    enemykda = round((enemydata['kills'] + enemydata['assists']) / enemydata['deaths'],2)
-
-    kdadiff = kda - enemykda
-    if playerdata['win']:
-        output += 'USER won their last ranked game! \n'
-    else:
-        output += 'USER fucked up last ranked game. \n'
-
-    output += '| CSD @ 10 |' + str(round(playerdata['csdelta']['0-10'],2)) + '|\n'
-    output += '| ---------------- | --------: |\n'
-    output += '| GOLD Diff @ 10 |' + str(round(playerdata['golddelta']['0-10'],2)) + '|'
-    output += '| XP @ 10 |' + str(round(playerdata['xpdelta']['0-10'],2)) + '|\n'
-    output += '| User KDA |' + str(kda) + '|\n'
-    output += '| Enemy KDA |' + str(enemykda) + '|\n'
-    # output += '* CSD @ 10' + str(round(playerdata['csdelta']['0-10'],2)) + '\n'
-    # output += ',\n a Gold difference of ' + str(round(playerdata['golddelta']['0-10'],2)) + ',\n'
-    # output += 'and a XP difference of ' + str(round(playerdata['xpdelta']['0-10'],2)) + '.\n'
-    if(enemykda > kda or round(playerdata['csdelta']['0-10'],2) < 0.0 or round(playerdata['golddelta']['0-10'],2) < 0.0):
-        output += '\n \n _VERDICT: FEEDER_'
-    else:
-        output += '\n \n _VERDICT: NOT A FEEDER_'
-    '''
     return playerdata, enemydata
 
 
@@ -270,7 +245,6 @@ async def on_message(message):
             await client.send_message(message.channel, embed=em)
         if message.content.startswith('!hasfed'):
             args = message.content.split(' ')
-            username = ''
             server = ''
             if len(args) == 2:
                 username = args[1]
@@ -287,8 +261,9 @@ async def on_message(message):
                 else:
                     username = ' '.join(args[1:])
             else:
-                await client.send_message(message.channel, 'Wrong Number of Arguments.' +
-                '\n !hasfed [username], [server] \n or \n !hasfed [username] \n No server defaults to NA1.')
+                await client.send_message(message.channel, 'Wrong Number of Arguments.' + 
+                                          '\n !hasfed [username], [server] \n ' +
+                                          'or \n !hasfed [username] \n No server defaults to NA1.')
                 return
             if server == '':
                 server = 'NA1'
@@ -300,6 +275,12 @@ async def on_message(message):
             else:
                 playerdata, enemydata = has_fed(id[0],server)
 
+            # URLs
+            match_history_url = 'http://matchhistory.na.leagueoflegends.com/en/#match-details/'
+            match_history_url += server
+            match_history_url += '/' + playerdata['matchId']
+            match_history_url += '/' + id + '?tab=overview'
+
             opggurl = 'https://'
             if server[-1] == '1' or server[-1] == '2':
                 server = server[:-1]
@@ -308,7 +289,11 @@ async def on_message(message):
             uname = username.replace(' ', '+')
             uname += uname.replace('_', '+')
             opggurl += uname
+            
             em = discord.Embed(title= 'Feeder Report (Click Here for OP.GG Profile)', colour=0x555555, url=opggurl)
+            em.add_field(name='Full Match History (Make sure to log in first!)', value='[Click Here]('+match_history_url+')')
+
+
 
             champinfo = pull_champion_info(playerdata['championId'])
 
@@ -318,7 +303,7 @@ async def on_message(message):
 
             champimgurl = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + champinfo['image']['full']
 
-            em.set_author(name = username + ' playing ' + champinfo['name'], icon_url= champimgurl)
+            em.set_author(name=username + ' playing ' + champinfo['name'], icon_url= champimgurl)
             if playerdata['lane'] == 'BOTTOM':
                 if playerdata['role'] == 'DUO_SUPPORT':
                     lane = 'Support'
@@ -333,21 +318,21 @@ async def on_message(message):
             else:
                 lane = 'BROKEN'
 
-            em.add_field(name = 'Lane', value = lane)
+            em.add_field(name='Lane', value=lane)
             KDAstring = str(playerdata['kills']) + ' / ' + str(playerdata['deaths']) + ' / ' + str(playerdata['assists'])
             enemyKDAstring = str(enemydata['kills']) + ' / ' + str(enemydata['deaths']) + ' / ' + str(enemydata['assists'])
             kda = round((playerdata['kills'] + playerdata['assists']) / playerdata['deaths'], 2)
             enemykda = round((enemydata['kills'] + enemydata['assists']) / enemydata['deaths'], 2)
-            em.add_field(name = 'KDA', value = (str(kda) + ' | **' + KDAstring + '**'))
-            em.add_field(name = 'CSD @ 10', value = str(round(playerdata['csdelta']['0-10'],2)))
-            em.add_field(name = 'Gold Difference @ 10', value = str(round(playerdata['golddelta']['0-10'],2)))
-            em.add_field(name = 'XP Difference @ 10', value = str(round(playerdata['xpdelta']['0-10'],2)))
-            em.add_field(name = "Enemy Laner's KDA", value = str(enemykda) + ' | **' + enemyKDAstring + '**')
-
+            em.add_field(name='KDA', value=(str(kda) + ' | **' + KDAstring + '**'))
+            em.add_field(name='CSD @ 10', value=str(round(playerdata['csdelta']['0-10'],2)))
+            em.add_field(name='Gold Difference @ 10', value=str(round(playerdata['golddelta']['0-10'],2)))
+            em.add_field(name='XP Difference @ 10', value=str(round(playerdata['xpdelta']['0-10'],2)))
+            em.add_field(name="Enemy Laner's KDA", value=str(enemykda) + ' | **' + enemyKDAstring + '**')
+            em.add_field(name='Win', value=str(playerdata['win']))
             if enemykda > kda or round(playerdata['csdelta']['0-10'], 2) < 0.0 or round(playerdata['golddelta']['0-10'], 2) < 0.0:
-                em.add_field(name = 'Feeder Status', value = 'True')
+                em.add_field(name='Feeder Status', value='True')
             else:
-                em.add_field(name = 'Feeder Status', value = 'False')
+                em.add_field(name='Feeder Status', value='False')
 
             await client.send_message(message.channel, embed=em)
             return
