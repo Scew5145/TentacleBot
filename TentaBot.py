@@ -136,7 +136,7 @@ def has_fed(acc_id, server = 'NA1'):
                 break
 
     #Print statement for bot output:
-    output = '```Markdown'
+    output = '```Markdown\n'
     kda = round((playerdata['kills'] + playerdata['assists']) / playerdata['deaths'], 2)
     enemykda = round((enemydata['kills'] + enemydata['assists']) / enemydata['deaths'],2)
 
