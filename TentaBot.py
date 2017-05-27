@@ -305,7 +305,9 @@ async def on_message(message):
                 server = server[:-1]
             opggurl += server
             opggurl += '.op.gg/summoner/userName='
-            opggurl += username.replace(' ', '+')
+            uname = username.replace(' ', '+')
+            uname += uname.replace('_', '+')
+            opggurl += uname
             em = discord.Embed(title= 'Feeder Report (Click Here for OP.GG Profile)', colour=0x555555, url=opggurl)
 
             champinfo = pull_champion_info(playerdata['championId'])
