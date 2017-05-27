@@ -45,7 +45,8 @@ def pull_champion_info(id, server = 'NA1'):
     if response.status_code != 200:
         print('something went wrong with the request. \n Status Code:', response.status_code)
         return -1
-    accDict = json.loads(response.text)
+    champDict = json.loads(response.text)
+    return champDict
 
 def pull_sum_ID(username, server = 'NA1'):
     # Uses the Riot API to grab the account's ID and return it. Doesn't return region, as it's an input.
@@ -308,13 +309,13 @@ async def on_message(message):
             em = discord.Embed(title= 'Feeder Report', colour=0x555555, url=opggurl)
 
             champinfo = pull_champion_info(playerdata['championId'])
-            print(champinfo)
+
             if champinfo == -1:
                 await client.send_message(message.channel, 'Issue pulling champ image. Too many requests to API?')
                 return
 
             champimgurl = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + champinfo['image']['full']
-            print(champimgurl)
+
             em.set_author(name = username, icon_url= champimgurl)
             if playerdata['lane'] == 'BOTTOM':
                 if playerdata['role'] == 'DUO_SUPPORT':
