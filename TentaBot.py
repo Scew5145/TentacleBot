@@ -279,7 +279,7 @@ async def on_message(message):
             match_history_url = 'http://matchhistory.na.leagueoflegends.com/en/#match-details/'
             match_history_url += server
             match_history_url += '/' + str(playerdata['matchId'])
-            match_history_url += '/' + str(id) + '?tab=overview'
+            match_history_url += '/' + str(id[0]) + '?tab=overview'
 
             opggurl = 'https://'
             if server[-1] == '1' or server[-1] == '2':
@@ -290,8 +290,11 @@ async def on_message(message):
             uname += uname.replace('_', '+')
             opggurl += uname
             
-            em = discord.Embed(title= 'Feeder Report (Click Here for OP.GG Profile)', colour=0x555555, url=opggurl)
-            em.add_field(name='Full Match History (Make sure to log in first!)', value='[Click Here]('+match_history_url+')')
+            em = discord.Embed(title= 'Feeder Report', colour=0x555555, url=opggurl)
+            em.add_field(name='Full Match History (Make sure to log in first!)', value='[Match History]('
+                                                                                       +match_history_url
+                                                                                       +') | [OP.GG Profile]('
+                                                                                       + opggurl + ')')
 
 
 
