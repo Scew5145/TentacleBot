@@ -147,7 +147,7 @@ def has_fed(acc_id, server = 'NA1'):
         output += 'USER fucked up last ranked game. \n'
 
     output += '| CSD @ 10 |' + str(round(playerdata['csdelta']['0-10'],2)) + '|\n'
-    output += '|----------------|--------|\n'
+    output += '| ---------------- | --------: |\n'
     output += '| GOLD Diff @ 10 |' + str(round(playerdata['golddelta']['0-10'],2)) + '|'
     output += '| XP @ 10 |' + str(round(playerdata['xpdelta']['0-10'],2)) + '|\n'
     output += '| User KDA |' + str(kda) + '|\n'
@@ -239,7 +239,10 @@ async def on_message(message):
 
         if message.content.startswith('!quickTest'):
             # This is just for testing helper functions. Change as needed.
-            await client.send_message(message.channel, pull_sum_ID('IgnusTeras'))
+            em = discord.Embed(title='My Embed Title', description='My Embed Content.', colour=0xDEADBF)
+            em.set_author(name='Someone', icon_url=client.user.default_avatar_url)
+
+            await client.send_message(message.channel, embed=em)
         if message.content.startswith('!hasfed'):
             args = message.content.split(' ')
             username = ''
