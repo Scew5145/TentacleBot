@@ -246,7 +246,7 @@ async def on_message(message):
             server = ''
             if len(args) == 2:
                 username = args[1]
-            if len(args) >= 3:
+            elif len(args) >= 3:
                 if args[-2][-1] == ',': # The last character of the second to last argument
                     server = args[-1]
                     username = ' '.join(args[1:-1])[:-1] # Python list syntax is magic. If you can't tell, last [:-1]
