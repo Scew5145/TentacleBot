@@ -277,7 +277,8 @@ async def on_message(message):
             else:
                 outputstring = has_fed(id[0],server)
             outputstring = outputstring.replace('USER', username)
+            em = discord.Embed(title=('Feeder Report for' +username), description=outputstring, colour=0xDEADBF)
 
-            await client.send_message(message.channel, outputstring)
+            await client.send_message(message.channel, embed=em)
 
 client.run(discToken)
