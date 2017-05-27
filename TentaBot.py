@@ -26,6 +26,27 @@ with open('insults.json') as insultfile:
     insultDict = json.load(insultfile)
 
 
+
+def pull_champion_info(id, server = 'NA1'):
+    if server.upper() in ['EUN', 'EUW', 'TR', 'BR', 'OC', 'NA', 'JP']:
+        server += '1'
+    elif server.upper() in ['EUNE', 'EUNE1']:
+        server = 'EUN1'
+    if server.upper() not in regions:
+        print('bad region. Please provide valid region id.')
+        return -1
+    url = 'https://'
+    url += server
+    url += '.api.riotgames.com/lol/static-data/v3/champions/'
+    url += str(id)
+    url += '?champData=image&api_key='
+    url += riotKey
+    response = requests.get(url)
+    if response.status_code != 200:
+        print('something went wrong with the request. \n Status Code:', response.status_code)
+        return -1
+    accDict = json.loads(response.text)
+
 def pull_sum_ID(username, server = 'NA1'):
     # Uses the Riot API to grab the account's ID and return it. Doesn't return region, as it's an input.
     if server.upper() in ['EUN', 'EUW', 'TR', 'BR', 'OC', 'NA', 'JP']:
@@ -58,7 +79,7 @@ def has_fed(acc_id, server = 'NA1'):
     elif server.upper() in ['EUNE', 'EUNE1']:
         server = 'EUN1'
     if server.upper() not in regions:
-        print('bad region. Please provide valid region id.')
+        print('bad region' + server + '. Please provide valid region id.')
         return -1
 
     # Match History (20 Entries)
@@ -121,7 +142,8 @@ def has_fed(acc_id, server = 'NA1'):
                 'golddelta': participant['timeline']['goldPerMinDeltas'],
                 'xpdelta': participant['timeline']['xpDiffPerMinDeltas'],
                 'lane': participant['timeline']['lane'],
-                'role': participant['timeline']['role']
+                'role': participant['timeline']['role'] ,
+                'championId': participant['championId']
             }
             break
     for participant in gameDict['participants']: #have to go through the whole dictionary to find the right opponent.
@@ -135,7 +157,8 @@ def has_fed(acc_id, server = 'NA1'):
                 }
                 break
 
-    #Print statement for bot output:
+    #Embed statement for bot output:
+    '''
     output = '```Markdown\n'
     kda = round((playerdata['kills'] + playerdata['assists']) / playerdata['deaths'], 2)
     enemykda = round((enemydata['kills'] + enemydata['assists']) / enemydata['deaths'],2)
@@ -159,7 +182,8 @@ def has_fed(acc_id, server = 'NA1'):
         output += '\n \n _VERDICT: FEEDER_'
     else:
         output += '\n \n _VERDICT: NOT A FEEDER_'
-    return output+'\n```'
+    '''
+    return playerdata, enemydata
 
 
 
@@ -265,8 +289,6 @@ async def on_message(message):
                 await client.send_message(message.channel, 'Wrong Number of Arguments.' +
                 '\n !hasfed [username], [server] \n or \n !hasfed [username] \n No server defaults to NA1.')
                 return
-            id = -1
-            outputstring = ''
             if server == '':
                 server = 'NA1'
 
@@ -275,9 +297,53 @@ async def on_message(message):
                 await client.send_message(message.channel, 'Issue pulling ID from server. Check username and server ID.')
                 return
             else:
-                outputstring = has_fed(id[0],server)
-            outputstring = outputstring.replace('USER', username)
-            em = discord.Embed(title=('Feeder Report for' +username), description=outputstring, colour=0xDEADBF)
+                playerdata, enemydata = has_fed(id[0],server)
+
+            opggurl = 'https://'
+            if server[-1] == '1' or server[-1] == '2':
+                server = server[:-1]
+            opggurl += server
+            opggurl += '.op.gg/summoner/userName='
+            opggurl += username.replace(' ', '+')
+            em = discord.Embed(title= 'Feeder Report', colour=0x555555, url=opggurl)
+
+            champinfo = pull_champion_info(playerdata['championId'])
+            if champinfo == -1:
+                await client.send_message(message.channel, 'Issue pulling champ image. Too many requests to API?')
+                return
+
+            champimgurl = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + champinfo['image']['full']
+            em.set_author(name = username, icon_url= champimgurl)
+            if playerdata['lane'] == 'BOTTOM':
+                if playerdata['role'] == 'DUO_SUPPORT':
+                    lane = 'Support'
+                else:
+                    lane = 'Bot'
+            elif playerdata['lane'] == 'MID':
+                lane = 'Mid'
+            elif playerdata['lane'] == 'TOP':
+                lane = 'Top'
+            elif playerdata['lane'] == 'JUNGLE':
+                lane = 'Jungle'
+            else:
+                lane = 'BROKEN'
+
+            em.add_field(name = 'Lane', value = lane)
+            KDAstring = str(playerdata['kills']) + ' / ' + str(playerdata['deaths']) + ' / ' + str(playerdata['assists'])
+            enemyKDAstring = str(enemydata['kills']) + ' / ' + str(enemydata['deaths']) + ' / ' + str(enemydata['assists'])
+            kda = round((playerdata['kills'] + playerdata['assists']) / playerdata['deaths'], 2)
+            enemykda = round((enemydata['kills'] + enemydata['assists']) / enemydata['deaths'], 2)
+            em.add_field(name = 'KDA', value = (str(kda) + ' | *' + KDAstring + '*'))
+            em.add_field(name = 'CSD @ 10', value = str(round(playerdata['csdelta']['0-10'],2)))
+            em.add_field(name = 'Gold Difference @ 10', value = str(round(playerdata['golddelta']['0-10'],2)))
+            em.add_field(name = 'XP Difference @ 10', value = str(round(playerdata['xpdelta']['0-10'],2)))
+            em.add_field(name = "Enemy Laner's KDA", value = str(enemykda) + ' | *' + enemyKDAstring + '*')
+
+            if enemykda > kda or round(playerdata['csdelta']['0-10'], 2) < 0.0 or round(playerdata['golddelta']['0-10'], 2) < 0.0:
+                em.add_field(name = 'Feeder Status', value = 'True')
+            else:
+                em.add_field(name = 'Feeder Status', value = 'False')
+
 
             await client.send_message(message.channel, embed=em)
 
