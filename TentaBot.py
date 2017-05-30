@@ -352,7 +352,7 @@ async def on_message(message):
                 emdict = em.to_dict()
                 output = ''
                 for key, val in emdict.items():
-                    output+= key + ' | ' + val + '\n'
+                    output+= str(key) + ' | ' + str(val) + '\n'
                 await client.send_message(message.channel, output)
             else:
                 await client.send_message(message.channel, embed=em)
