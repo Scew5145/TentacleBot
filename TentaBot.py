@@ -348,8 +348,16 @@ async def on_message(message):
                 em.add_field(name='Feeder Status', value='True')
             else:
                 em.add_field(name='Feeder Status', value='False')
+            if(args[0] == '!hasfedphone'):
+                emdict = em.to_dict()
+                output = ''
+                for key, val in emdict.items():
+                    output+= key + ' | ' + val + '\n'
+                await client.send_message(message.channel, output)
+            else:
+                await client.send_message(message.channel, embed=em)
 
-            await client.send_message(message.channel, embed=em)
             return
+
 
 client.run(discToken)
