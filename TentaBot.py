@@ -269,24 +269,24 @@ async def on_message(message):
             champimgurl = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + champimage['image']['full']
             em = discord.Embed(title=statDict['name'], color=0x3333AA, description='**Level 1 | Growth Stat**')
             em.set_author(name='all the stat stuff.',icon_url=champimgurl)
-            em.add_field(name='Attack Damage', value= str(statDict['attackdamage'])
+            em.add_field(name='Attack Damage', value= str(statDict['stats']['attackdamage'])
                                                       + ' | '
-                                                      + str(statDict['attackdamageperlevel']) )
-            em.add_field(name='Attack Speed', value= str(statDict['attackspeed'])
+                                                      + str(statDict['stats']['attackdamageperlevel']) )
+            em.add_field(name='Attack Speed', value= str(statDict['stats']['attackspeed'])
                                                       + ' | '
-                                                      + str(statDict['attackspeedperlevel']) )
-            em.add_field(name='Mana', value=str(statDict['mp'])
+                                                      + str(statDict['stats']['attackspeedperlevel']) )
+            em.add_field(name='Mana', value=str(statDict['stats']['mp'])
                                                     + ' | '
-                                                    + str(statDict['mpperlevel']))
-            em.add_field(name='Health', value= str(statDict['hp'])
+                                                    + str(statDict['stats']['mpperlevel']))
+            em.add_field(name='Health', value= str(statDict['stats']['hp'])
                                                       + ' | '
-                                                      + str(statDict['hpperlevel']) )
-            em.add_field(name='Armor', value= str(statDict['armor'])
+                                                      + str(statDict['stats']['hpperlevel']) )
+            em.add_field(name='Armor', value= str(statDict['stats']['armor'])
                                                       + ' | '
-                                                      + str(statDict['armorperlevel']) )
-            em.add_field(name='Magic Resist', value= str(statDict['spellblock'])
+                                                      + str(statDict['stats']['armorperlevel']) )
+            em.add_field(name='Magic Resist', value= str(statDict['stats']['spellblock'])
                                                       + ' | '
-                                                      + str(statDict['spellblockperlevel']) )
+                                                      + str(statDict['stats']['spellblockperlevel']) )
             await client.send_message(message.channel, embed=em)
             return
 
