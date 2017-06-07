@@ -18,8 +18,7 @@ class championDB:
         # -1 means bad champion name. -2 means bad url retrieval.
         # Pulls from this: https://developer.riotgames.com/api-methods/#lol-static-data-v3/GET_getChampionList
         id = -1
-        url = 'https://na1.api.riotgames.com/lol/static-data/v3/champions'
-        url += '?api_key='
+        url = 'https://na1.api.riotgames.com/lol/static-data/v3/champions?dataById=true&api_key='
         url += self.riotKey
 
         response = requests.get(url)
@@ -29,9 +28,8 @@ class championDB:
             return -2
         champData = json.loads(response.text)
         for key in champData['data']:
-            print()
-            if champData[key]['name'].lower() == championName.lower():
-                id = champData[key]['id']
+            if championName.lower() == champData['data'][key]['name'].lower():
+                id = champData['data'][key]['id']
 
         if id == -1:
             print("Couldn't find champion " + championName + '.')
