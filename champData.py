@@ -28,7 +28,7 @@ class championDB:
             print('Error code: ', response.status_code)
             return -2
         champData = json.loads(response.text)
-        for champion in champData:
+        for champion in champData['data']:
             if champion['name'].lower() == championName.lower():
                 id = champion['id']
 
