@@ -261,6 +261,7 @@ async def on_message(message):
 
             champId = cdb.get_champId(args[1])
             statDict = cdb.get_bstats(champId)
+            print(str(statDict))
             champimage = pull_champion_image(champId)
             if champimage == -1:
                 await client.send_message(message.channel, 'Issue pulling champ image. Too many requests to API?')
