@@ -267,7 +267,7 @@ async def on_message(message):
                 return
             champimgurl = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + champimage['image']['full']
             em = discord.Embed(title=statDict['name'], color=0x3333AA, description='**Level 1 | Growth Stat**')
-            em.set_author(icon_url=champimgurl)
+            em.set_author(name='all the stat stuff.',icon_url=champimgurl)
             em.add_field(name='Attack Damage', value= str(statDict['attackdamage]'])
                                                       + ' | '
                                                       + str(statDict['attackdamageperlevel']) )
