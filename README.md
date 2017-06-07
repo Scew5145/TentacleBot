@@ -39,4 +39,4 @@ This is a command I personally use to test small chunks of code to make sure I u
 Disclaimer
 -
 
-This project is by no means endorsed by Riot Games, and I am in no way affiliated with them.
+This project is by no means endorsed by Riot Games, and any statements made inside of its code or output is entirely unaffiliated with Riot.
