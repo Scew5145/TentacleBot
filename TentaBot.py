@@ -29,7 +29,7 @@ with open('insults.json') as insultfile:
 
 
 
-def pull_champion_info(id, server = 'NA1'):
+def pull_champion_image(id, server = 'NA1'):
     if server.upper() in ['EUN', 'EUW', 'TR', 'BR', 'OC', 'NA', 'JP']:
         server += '1'
     elif server.upper() in ['EUNE', 'EUNE1']:
@@ -247,11 +247,10 @@ async def on_message(message):
         # COMMAND: !quickTest
         # TODO: Change as nessecary for testing
         if message.content.startswith('!quickTest'):
-            # This is just for testing helper functions. Change as needed.
-            em = discord.Embed(title='My Embed Title', description='My Embed Content.', colour=0xDEADBF)
-            em.set_author(name='Someone', icon_url=client.user.default_avatar_url)
-
-            await client.send_message(message.channel, embed=em)
+            args = message.content.split(' ')
+            cdb = champData.championDB(riotKey)
+            id = cdb.get_champId(args[1])
+            await client.send_message(message.channel, str(id))
 
         #  COMMAND: !hasfed
         # TODO: Add mobile support since apparently embeds suck ass there
@@ -310,7 +309,7 @@ async def on_message(message):
 
 
 
-            champinfo = pull_champion_info(playerdata['championId'])
+            champinfo = pull_champion_image(playerdata['championId'])
 
             if champinfo == -1:
                 await client.send_message(message.channel, 'Issue pulling champ image. Too many requests to API?')
