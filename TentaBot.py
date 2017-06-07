@@ -266,12 +266,12 @@ async def on_message(message):
                 await client.send_message(message.channel, 'Issue pulling champ image. Too many requests to API?')
                 return
             champimgurl = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + champimage['image']['full']
-            em = discord.Embed(title=statDict['name'], color=0x3333AA, description='**Level 1 | Growth Stat**')
-            em.set_author(name='all the stat stuff.',icon_url=champimgurl)
+            em = discord.Embed(color=0x3333AA, description='**Level 1 | Growth Stat**')
+            em.set_author(name=statDict['name'],icon_url=champimgurl)
             em.add_field(name='Attack Damage', value= str(statDict['stats']['attackdamage'])
                                                       + ' | '
                                                       + str(statDict['stats']['attackdamageperlevel']) )
-            em.add_field(name='Attack Speed', value= str(0.625/(1+statDict['stats']['attackspeedoffset']))
+            em.add_field(name='Attack Speed', value= str(round(0.625/(1+statDict['stats']['attackspeedoffset']),2))
                                                       + ' | '
                                                       + str(statDict['stats']['attackspeedperlevel']) )
             em.add_field(name='Mana', value=str(statDict['stats']['mp'])
