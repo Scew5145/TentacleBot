@@ -1,3 +1,4 @@
+import champData
 import discord
 import json
 import random
@@ -5,6 +6,7 @@ import requests
 import asyncio
 import sys
 import os
+
 
 raw = ''
 discToken = ''
@@ -74,7 +76,7 @@ def pull_sum_ID(username, server = 'NA1'):
 
 def has_fed(acc_id, server = 'NA1'):
     # Grabs KDA from most recent game, cs delta, win/loss.
-    # Total riotAPI Requests inside code: 3
+    # Total riotAPI Requests inside code: 3; 2 counted towards rate limit, as one is grabbing static data
     if server.upper() in ['EUN', 'EUW', 'TR', 'BR', 'OC', 'NA', 'JP']:
         server += '1'
     elif server.upper() in ['EUNE', 'EUNE1']:
@@ -176,9 +178,11 @@ questionBlacklist = []
 async def on_message(message):
     if message.author != client.user:
 
+        # COMMAND: !ping
         if message.content.startswith('!ping'): #Repeats what the user says
                 await client.send_message(message.channel, message.content)
 
+        # COMMAND: !8ball
         if message.content.startswith('!8ball'):
             if len(message.content) > 7:
                 random.seed(message.author.name.join(message.content[6:]))
@@ -213,9 +217,11 @@ async def on_message(message):
                 reply = "I'm not going to answer that."
             await  client.send_message(message.channel, reply)
 
+        # COMMAND: !help
         if message.content.startswith('!help'):
                 await  client.send_message(message.channel, 'No fuck off')
 
+        # COMMAND: !insult
         if message.content.startswith('!insult'):
             random.seed()
             base = random.choice(insultDict['base'])
@@ -238,12 +244,17 @@ async def on_message(message):
         if message.content.startswith('!github'):
             await client.send_message(message.channel, 'Github Link: \n https://github.com/Scew5145/TentacleBot')
 
+        # COMMAND: !quickTest
+        # TODO: Change as nessecary for testing
         if message.content.startswith('!quickTest'):
             # This is just for testing helper functions. Change as needed.
             em = discord.Embed(title='My Embed Title', description='My Embed Content.', colour=0xDEADBF)
             em.set_author(name='Someone', icon_url=client.user.default_avatar_url)
 
             await client.send_message(message.channel, embed=em)
+
+        #  COMMAND: !hasfed
+        # TODO: Add mobile support since apparently embeds suck ass there
         if message.content.startswith('!hasfed'):
             args = message.content.split(' ')
             server = ''
@@ -271,7 +282,8 @@ async def on_message(message):
 
             id = pull_sum_ID(username, server)
             if id == -1:
-                await client.send_message(message.channel, 'Issue pulling ID from server. Check username and server ID.')
+                await client.send_message(message.channel, 'Issue pulling ID from server. Check username and server ID.'
+                                                           +'\n Also could be an issue with the server down.')
                 return
             else:
                 playerdata, enemydata = has_fed(id[0],server)
@@ -355,11 +367,8 @@ async def on_message(message):
             else:
                 em.add_field(name='Feeder Status', value='False')
             if args[0] == '!hasfedphone':
-                emdict = em.to_dict()
-                output = ''
-                for key, val in emdict.items():
-                    output+= str(key) + ' | ' + str(val) + '\n'
-                await client.send_message(message.channel, output)
+                phonem = discord.Embed(title='OP.GG Link', url=opggurl, description='Click to make the thing do the thing')
+                await client.send_message(message.channel, embed=phonem)
             else:
                 await client.send_message(message.channel, embed=em)
 
