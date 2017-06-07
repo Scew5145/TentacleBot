@@ -37,7 +37,7 @@ class championDB:
 
     def get_bstats(self, championid):
         url = 'https://na1.api.riotgames.com/lol/static-data/v3/champions/'
-        url += str(id)
+        url += str(championid)
         url += '?champData=stats&api_key='
         url += self.riotKey
         response = requests.get(url)
