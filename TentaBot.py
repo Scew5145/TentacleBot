@@ -74,7 +74,7 @@ def pull_sum_ID(username, server = 'NA1'):
 
 def has_fed(acc_id, server = 'NA1'):
     # Grabs KDA from most recent game, cs delta, win/loss.
-    # Total riotAPI Requests inside code: 2
+    # Total riotAPI Requests inside code: 3
     if server.upper() in ['EUN', 'EUW', 'TR', 'BR', 'OC', 'NA', 'JP']:
         server += '1'
     elif server.upper() in ['EUNE', 'EUNE1']:
@@ -324,10 +324,16 @@ async def on_message(message):
             em.add_field(name='Lane', value=lane)
             KDAstring = str(playerdata['kills']) + ' / ' + str(playerdata['deaths']) + ' / ' + str(playerdata['assists'])
             enemyKDAstring = str(enemydata['kills']) + ' / ' + str(enemydata['deaths']) + ' / ' + str(enemydata['assists'])
-            kda = round((playerdata['kills'] + playerdata['assists']) / playerdata['deaths'], 2)
-            enemykda = round((enemydata['kills'] + enemydata['assists']) / enemydata['deaths'], 2)
-            em.add_field(name='KDA', value=(str(kda) + ' | **' + KDAstring + '**'))
-            em.add_field(name="Enemy Laner's KDA", value=str(enemykda) + ' | **' + enemyKDAstring + '**')
+            if playerdata['deaths'] != 0:
+                kda = str(round((playerdata['kills'] + playerdata['assists']) / playerdata['deaths'], 2))
+            else:
+                kda = 'Perfect'
+            if enemydata['deaths'] != 0:
+                enemykda = str(round((enemydata['kills'] + enemydata['assists']) / enemydata['deaths'], 2))
+            else:
+                enemykda = 'Perfect'
+            em.add_field(name='KDA', value=(kda + ' | **' + KDAstring + '**'))
+            em.add_field(name="Enemy Laner's KDA", value=enemykda + ' | **' + enemyKDAstring + '**')
             em.add_field(name='CSD @ 10', value=str(round(playerdata['csdelta']['0-10'],2)))
             em.add_field(name='Gold Difference @ 10', value=str(round(playerdata['golddelta']['0-10'],2)))
             em.add_field(name='XP Difference @ 10', value=str(round(playerdata['xpdelta']['0-10'],2)))
@@ -348,7 +354,7 @@ async def on_message(message):
                 em.add_field(name='Feeder Status', value='True')
             else:
                 em.add_field(name='Feeder Status', value='False')
-            if(args[0] == '!hasfedphone'):
+            if args[0] == '!hasfedphone':
                 emdict = em.to_dict()
                 output = ''
                 for key, val in emdict.items():
