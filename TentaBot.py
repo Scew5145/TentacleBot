@@ -250,7 +250,8 @@ async def on_message(message):
             args = message.content.split(' ')
             cdb = champData.championDB(riotKey)
             id = cdb.get_champId(args[1])
-            await client.send_message(message.channel, str(id))
+            dict = cdb.get_bstats(id)
+            await client.send_message(message.channel, str(dict))
 
         #  COMMAND: !hasfed
         # TODO: Add mobile support since apparently embeds suck ass there
