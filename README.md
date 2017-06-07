@@ -35,3 +35,8 @@ Region is the region's abbreviation ['NA1', 'RU', 'KR', 'EUN1', 'EUW1', 'TR1', '
 * _!quickTest_
 
 This is a command I personally use to test small chunks of code to make sure I understand what I'm doing. Changes frequently, and often has hard-coded IDs.
+
+Disclaimer
+-
+
+This project is by no means endorsed by Riot Games, and I am in no way affiliated with them.
