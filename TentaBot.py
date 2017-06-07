@@ -268,22 +268,22 @@ async def on_message(message):
             champimgurl = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + champimage['image']['full']
             em = discord.Embed(title=statDict['name'], color=0x3333AA, description='**Level 1 | Growth Stat**')
             em.set_author(name='all the stat stuff.',icon_url=champimgurl)
-            em.add_field(name='Attack Damage', value= str(statDict['attackdamage]'])
+            em.add_field(name='Attack Damage', value= str(statDict['attackdamage'])
                                                       + ' | '
                                                       + str(statDict['attackdamageperlevel']) )
-            em.add_field(name='Attack Speed', value= str(statDict['attackspeed]'])
+            em.add_field(name='Attack Speed', value= str(statDict['attackspeed'])
                                                       + ' | '
                                                       + str(statDict['attackspeedperlevel']) )
-            em.add_field(name='Mana', value=str(statDict['mp]'])
+            em.add_field(name='Mana', value=str(statDict['mp'])
                                                     + ' | '
                                                     + str(statDict['mpperlevel']))
-            em.add_field(name='Health', value= str(statDict['hp]'])
+            em.add_field(name='Health', value= str(statDict['hp'])
                                                       + ' | '
                                                       + str(statDict['hpperlevel']) )
-            em.add_field(name='Armor', value= str(statDict['armor]'])
+            em.add_field(name='Armor', value= str(statDict['armor'])
                                                       + ' | '
                                                       + str(statDict['armorperlevel']) )
-            em.add_field(name='Magic Resist', value= str(statDict['spellblock]'])
+            em.add_field(name='Magic Resist', value= str(statDict['spellblock'])
                                                       + ' | '
                                                       + str(statDict['spellblockperlevel']) )
             await client.send_message(message.channel, embed=em)
