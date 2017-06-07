@@ -27,7 +27,7 @@ random.seed(None)
 with open('insults.json') as insultfile:
     insultDict = json.load(insultfile)
 
-
+cdb = champData.championDB(riotKey)
 
 def pull_champion_image(id, server = 'NA1'):
     if server.upper() in ['EUN', 'EUW', 'TR', 'BR', 'OC', 'NA', 'JP']:
@@ -248,12 +248,50 @@ async def on_message(message):
         # TODO: Change as nessecary for testing
         if message.content.startswith('!quickTest'):
             args = message.content.split(' ')
-            cdb = champData.championDB(riotKey)
             id = cdb.get_champId(args[1])
             dict = cdb.get_bstats(id)
             await client.send_message(message.channel, str(dict))
 
-        #  COMMAND: !hasfed
+        # COMMAND: !championstats | !cstats
+        if message.content.startswith('!championstats') or message.content.startswith('!cstats'):
+            args = message.content.split(' ')
+            if len(args) != 2:
+                await client.send_message(message.channel, '!championstats [champion name]')
+                return
+
+            champId = cdb.get_champId(args[1])
+            statDict = cdb.get_bstats(champId)
+            champimage = pull_champion_image(champId)
+            if champimage == -1:
+                await client.send_message(message.channel, 'Issue pulling champ image. Too many requests to API?')
+                return
+            champimgurl = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + champimage['image']['full']
+            em = discord.Embed(title=statDict['name'], color=0x3333AA, description='**Level 1 | Growth Stat**')
+            em.set_author(icon_url=champimgurl)
+            em.add_field(name='Attack Damage', value= str(statDict['attackdamage]'])
+                                                      + ' | '
+                                                      + str(statDict['attackdamageperlevel']) )
+            em.add_field(name='Attack Speed', value= str(statDict['attackspeed]'])
+                                                      + ' | '
+                                                      + str(statDict['attackspeedperlevel']) )
+            em.add_field(name='Mana', value=str(statDict['mp]'])
+                                                    + ' | '
+                                                    + str(statDict['mpperlevel']))
+            em.add_field(name='Health', value= str(statDict['hp]'])
+                                                      + ' | '
+                                                      + str(statDict['hpperlevel']) )
+            em.add_field(name='Armor', value= str(statDict['armor]'])
+                                                      + ' | '
+                                                      + str(statDict['armorperlevel']) )
+            em.add_field(name='Magic Resist', value= str(statDict['spellblock]'])
+                                                      + ' | '
+                                                      + str(statDict['spellblockperlevel']) )
+            await client.send_message(message.channel, embed=em)
+            return
+
+
+
+        # COMMAND: !hasfed
         # TODO: Add mobile support since apparently embeds suck ass there
         if message.content.startswith('!hasfed'):
             args = message.content.split(' ')
@@ -308,17 +346,15 @@ async def on_message(message):
                                                                                        +') | [OP.GG Profile]('
                                                                                        + opggurl + ')')
 
+            champimage = pull_champion_image(playerdata['championId'])
 
-
-            champinfo = pull_champion_image(playerdata['championId'])
-
-            if champinfo == -1:
+            if champimage == -1:
                 await client.send_message(message.channel, 'Issue pulling champ image. Too many requests to API?')
                 return
 
-            champimgurl = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + champinfo['image']['full']
+            champimgurl = 'http://ddragon.leagueoflegends.com/cdn/6.2.1/img/champion/' + champimage['image']['full']
 
-            em.set_author(name=username + ' playing ' + champinfo['name'], icon_url= champimgurl)
+            em.set_author(name=username + ' playing ' + champimage['name'], icon_url= champimgurl)
             if playerdata['lane'] == 'BOTTOM':
                 if playerdata['role'] == 'DUO_SUPPORT':
                     lane = 'Support'
