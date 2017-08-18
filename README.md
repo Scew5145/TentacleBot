@@ -39,4 +39,4 @@ This is a command I personally use to test small chunks of code to make sure I u
 Disclaimer
 -
 
-This project is by no means endorsed by Riot Games, and any statements made inside of its code or output is entirely unaffiliated with Riot.
+TentacleBot isn’t endorsed by Riot Games and doesn’t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.
