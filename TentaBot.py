@@ -102,9 +102,8 @@ def has_fed(acc_id, server = 'NA1'):
     recent_games = json.loads(response.text)
     most_recent_match_id = -1
     for match in recent_games['matches']:
-        if match['queue'] == 420 or match['queue'] == 440:
-            most_recent_match_id = match['gameId']
-            break
+        most_recent_match_id = match['gameId']
+        break
 
     if most_recent_match_id == -1:
         return "No ranked match in the last 20 games. Normals and stuff are private so I can't do things with them."
