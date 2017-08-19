@@ -116,6 +116,8 @@ def has_fed(acc_id, server = 'NA1'):
     url += str(most_recent_match_id)
     url += '?api_key='
     url += riotKey
+    url += '&forAccountId='
+    url += str(acc_id)
     response = requests.get(url)
     if response.status_code != 200:
         print('something went wrong with the request. \n Status Code:', response.status_code)
@@ -125,7 +127,8 @@ def has_fed(acc_id, server = 'NA1'):
     parid = -1
     for entry in gameDict['participantIdentities']:
         print(entry)
-        if entry['player']['accountId'] == acc_id:
+        if 'player' in entry:
+            if entry['player']['accountId'] == acc_id:
             parid = entry['participantId']
             break
     if parid == -1 :
