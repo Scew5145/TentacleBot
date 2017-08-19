@@ -124,6 +124,7 @@ def has_fed(acc_id, server = 'NA1'):
 
     parid = -1
     for entry in gameDict['participantIdentities']:
+        print(entry)
         if entry['player']['accountId'] == acc_id:
             parid = entry['participantId']
             break
