@@ -129,8 +129,8 @@ def has_fed(acc_id, server = 'NA1'):
         print(entry)
         if 'player' in entry:
             if entry['player']['accountId'] == acc_id:
-            parid = entry['participantId']
-            break
+                parid = entry['participantId']
+                break
     if parid == -1 :
         return "Couldn't find parid. something is super broken."
 
