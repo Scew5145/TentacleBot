@@ -6,6 +6,7 @@ import requests
 import asyncio
 import sys
 import os
+from lxml import html
 
 
 raw = ''
@@ -20,14 +21,26 @@ else:
     exit()
 print(riotKey, 'riotkey', discToken)
 
-
-
 client = discord.Client()
 random.seed(None)
 with open('insults.json') as insultfile:
     insultDict = json.load(insultfile)
 
 cdb = champData.championDB(riotKey)
+
+def random_CAP_image():
+    smogresp = requests.get('http://www.smogon.com/forums/threads/cap-23-art-submissions.3613136/#post-7485706')
+    if(smogresp.status_code != 200):
+        return -1
+    smogtree = html.fromstring(smogresp.content)
+    imgElements = smogtree.xpath("//li[@id = 'post-7485706']/div[@class = 'messageInfo primaryContent']"
+                            + "/div/article/blockquote"
+                            + "/div[@class = 'bbCodeBlock bbCodeQuote bbmHideBlock']"
+                            + "/div[@class = 'quotecontent']/div/blockquote/img")
+    # print(lielms)
+    # imgArr = lielms[0].find("//img")
+    random.seed(None)
+    return random.choice(imgElements).attrib['src']
 
 def pull_champion_image(id, server = 'NA1'):
     if server.upper() in ['EUN', 'EUW', 'TR', 'BR', 'OC', 'NA', 'JP']:
@@ -412,6 +425,28 @@ async def on_message(message):
                 await client.send_message(message.channel, embed=em)
 
             return
+        if message.content.startswith('!capart'):
+            messagearr = ['first time posting [b]e gentle',
+                          '(b)etter watch out for my fire drawings',
+                          'my (b)est attempt at drawing shit',
+                          'drawings coming right up',
+                          '*vomits art*',
+                          '*explodes creatively*',
+                          'this took me 3 seconds to draw',
+                          'help',
+                          'I forgot to draw pants ;)',
+                          'Photographic evidience of the holocaust [colorized]',
+                          'I drew this - not some random person on the internet.',
+                          'somebody pay me',
+                          'ART'
+                         ]
+            random.seed(None)
+            imgURL = random_CAP_image()
+            if imgURL == -1:
+                await client.send_message(message.channel, "CAP things broken")
+            else:
+                textoutput = random.choice(messagearr) + '\n' + imgURL
+                await client.send_message(message.channel, textoutput)
 
 
 client.run(discToken)
